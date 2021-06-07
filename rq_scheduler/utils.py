@@ -20,12 +20,12 @@ def to_unix(dt):
     return calendar.timegm(dt.utctimetuple())
 
 
-def get_next_scheduled_time(cron_string, use_local_timezone=False):
+def get_next_scheduled_time(cron_string, use_local_timezone=False, job_id=None):
     """Calculate the next scheduled time by creating a crontab object
     with a cron string"""
     tz = dateutil.tz.tzlocal() if use_local_timezone else dateutil.tz.UTC
     now = datetime.now(tz)
-    itr = croniter.croniter(cron_string, now)
+    itr = croniter.croniter(cron_string, now, hash_id=job_id)
     return itr.get_next(datetime).astimezone(tz)
 
 
